@@ -29,9 +29,6 @@ const todoReducer = (
 
       newListTodos[action.payload as number].ifComplete =
         !newListTodos[action.payload as number].ifComplete;
-
-      // const updateTodo = { ...state.todos[action.payload as number] };
-      // updateTodo.ifComplete = !updateTodo.ifComplete;
       return {
         todos: newListTodos,
       };

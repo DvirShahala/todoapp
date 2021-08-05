@@ -12,26 +12,13 @@ const initialTodos: Array<IToDo> = [
 ];
 
 const TodoList: React.FC = () => {
-  // const [toDos, setToDos] = useState<Array<IToDo>>(initialTodos);
   const todos = useSelector((state: ToDoState) => state.todos);
 
   const dispatch = useDispatch();
 
   const handleClick = (index: number) => {
-    // const newToDos = [...toDos];
-    // newToDos[index] = {
-    //   ...newToDos[index],
-    //   ifComplete: !newToDos[index].ifComplete,
-    // };
-    // setToDos(newToDos);
     dispatch(clickComplete(index));
-    console.log("handle click");
   };
-
-  // const addTodo = (newTodo: string) => {
-  //   const newToDoToAdd = { name: newTodo, ifComplete: false };
-  //   newTodo.trim() !== "" && setToDos([...toDos, newToDoToAdd]);
-  // };
 
   return (
     <>

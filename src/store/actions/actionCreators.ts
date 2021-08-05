@@ -1,4 +1,3 @@
-//import { IToDo } from "../../models/inerfaces";
 import * as actionTypes from "./actionTypes";
 
 export const setToDos = (todo: string) => {
