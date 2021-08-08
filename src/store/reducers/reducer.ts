@@ -2,10 +2,11 @@ import { IToDo, ToDoState } from "../../models/inerfaces";
 import * as actionTypes from "../actions/actionTypes";
 
 const initialState: ToDoState = {
+  nextId: 4,
   todos: [
-    { name: "Daily Raiden", ifComplete: true },
-    { name: "Learn React", ifComplete: false },
-    { name: "Eat lunch", ifComplete: false },
+    { id: 1, name: "Daily Raiden", ifComplete: true },
+    { id: 2, name: "Learn React", ifComplete: false },
+    { id: 3, name: "Eat lunch", ifComplete: false },
   ],
 };
 
@@ -16,20 +17,28 @@ const todoReducer = (
   switch (action.type) {
     case actionTypes.ADD_TODO:
       const newTodo: IToDo = {
+        id: state.nextId,
         name: action.payload as string,
         ifComplete: false,
       };
       return {
         ...state,
         todos: [...state.todos, newTodo],
+        nextId: ++state.nextId as number,
       };
 
     case actionTypes.CLICK_COMPLETE:
       const newListTodos = [...state.todos];
 
-      newListTodos[action.payload as number].ifComplete =
-        !newListTodos[action.payload as number].ifComplete;
+      const indexToChange = newListTodos.findIndex(
+        (todo) => todo.id === (action.payload as number)
+      );
+
+      newListTodos[indexToChange].ifComplete =
+        !newListTodos[indexToChange].ifComplete;
+
       return {
+        ...state,
         todos: newListTodos,
       };
   }

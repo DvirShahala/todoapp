@@ -1,15 +1,15 @@
 import * as actionTypes from "./actionTypes";
 
-export const setToDos = (todo: string) => {
+export const addToDos = (todo: string) => {
   return {
     type: actionTypes.ADD_TODO,
     payload: todo,
   };
 };
 
-export const clickComplete = (index: number) => {
+export const clickComplete = (id: number) => {
   return {
     type: actionTypes.CLICK_COMPLETE,
-    payload: index,
+    payload: id,
   };
 };

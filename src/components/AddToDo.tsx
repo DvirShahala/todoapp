@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setToDos } from "../store/actions/actionCreators";
+import { addToDos } from "../store/actions/actionCreators";
 
 const AddToDo: React.FC = () => {
   const [newTodo, setNewTodo] = useState<string>("");
@@ -11,12 +11,12 @@ const AddToDo: React.FC = () => {
     setNewTodo(e.target.value);
   };
 
-  // Use Thunk
+  // Use Thunk!!!
   const messageAndDispatch = () => (dispatch: Function, getState: Function) => {
     if (getState().todos.length >= 5) {
       alert("you are too busy!!!");
     }
-    dispatch(setToDos(newTodo));
+    dispatch(addToDos(newTodo));
   };
 
   const handleSubmit = (e: FormEvent<HTMLButtonElement>) => {
