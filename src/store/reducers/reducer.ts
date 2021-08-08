@@ -41,6 +41,18 @@ const todoReducer = (
         ...state,
         todos: newListTodos,
       };
+
+    case actionTypes.CLICK_DELETE:
+      const tempTodosList = [...state.todos];
+
+      const newDelListTodos = tempTodosList.filter(
+        (todo) => todo.id !== (action.payload as number)
+      );
+
+      return {
+        ...state,
+        todos: newDelListTodos,
+      };
   }
   return state;
 };

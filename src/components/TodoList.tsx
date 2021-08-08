@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IToDo, ToDoState } from "../models/inerfaces";
-import { clickComplete } from "../store/actions/actionCreators";
+import { clickComplete, clickDelete } from "../store/actions/actionCreators";
 import AddToDo from "./AddToDo";
 import TodoListItem from "./TodoListItem";
 
@@ -10,9 +10,12 @@ const TodoList: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const handleClick = (id: number) => {
-    console.log(id);
+  const handleCompleteClick = (id: number) => {
     dispatch(clickComplete(id));
+  };
+
+  const handleDelClick = (id: number) => {
+    dispatch(clickDelete(id));
   };
 
   return (
@@ -23,7 +26,8 @@ const TodoList: React.FC = () => {
           <TodoListItem
             key={toDo.id}
             todo={toDo}
-            clickTodo={() => handleClick(toDo.id)}
+            clickCompleteTodo={() => handleCompleteClick(toDo.id)}
+            clickDeleteTodo={() => handleDelClick(toDo.id)}
           />
         );
       })}

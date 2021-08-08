@@ -3,10 +3,20 @@ import { IToDo } from "../models/inerfaces";
 
 interface toDoListItemProps {
   todo: IToDo;
-  clickTodo: () => void;
+  clickCompleteTodo: () => void;
+  clickDeleteTodo: () => void;
 }
 
-const TodoListItem: React.FC<toDoListItemProps> = ({ todo, clickTodo }) => {
+const delButton = {
+  marginLeft: "10px",
+  color: "#E04132",
+} as React.CSSProperties;
+
+const TodoListItem: React.FC<toDoListItemProps> = ({
+  todo,
+  clickCompleteTodo,
+  clickDeleteTodo,
+}) => {
   return (
     <div>
       <label
@@ -14,9 +24,16 @@ const TodoListItem: React.FC<toDoListItemProps> = ({ todo, clickTodo }) => {
           textDecoration: todo.ifComplete ? "line-through" : "none",
         }}
       >
-        <input type="checkbox" checked={todo.ifComplete} onChange={clickTodo} />
+        <input
+          type="checkbox"
+          checked={todo.ifComplete}
+          onChange={clickCompleteTodo}
+        />
         {todo.name}
       </label>
+      <button style={delButton} onClick={clickDeleteTodo}>
+        Delete
+      </button>
     </div>
   );
 };
