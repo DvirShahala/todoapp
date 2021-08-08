@@ -1,11 +1,27 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addToDos } from "../store/actions/actionCreators";
+import { makeStyles } from "@material-ui/core/styles";
+import { Button, TextField } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+  textField: {
+    marginRight: "20px",
+    marginTop: "40px",
+  },
+  buttons: {
+    marginTop: "49px",
+    "&:hover": {
+      background: theme.palette.secondary.main,
+    },
+  },
+}));
 
 const AddToDo: React.FC = () => {
   const [newTodo, setNewTodo] = useState<string>("");
 
   const dispatch = useDispatch();
+  const classes = useStyles();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewTodo(e.target.value);
@@ -27,11 +43,23 @@ const AddToDo: React.FC = () => {
 
   return (
     <>
-      <form>
-        <input type="text" value={newTodo} onChange={handleChange} />
-        <button type="submit" onClick={handleSubmit}>
+      <form autoComplete="off">
+        <TextField
+          className={classes.textField}
+          id="outlined-basic"
+          label="Enter New Todo"
+          variant="outlined"
+          value={newTodo}
+          onChange={handleChange}
+        />
+        <Button
+          className={classes.buttons}
+          variant="contained"
+          color="primary"
+          onClick={handleSubmit}
+        >
           Add To Do
-        </button>
+        </Button>
       </form>
     </>
   );

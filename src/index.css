@@ -14,9 +14,5 @@ code {
 
 html {
   height: 100vh;
-  background-image: linear-gradient(
-    180deg,
-    rgb(134, 167, 255),
-    rgb(182, 187, 238)
-  );
+  background-color: rgb(226, 226, 226);
 }

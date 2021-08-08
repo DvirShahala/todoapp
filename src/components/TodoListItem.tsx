@@ -1,5 +1,7 @@
 import React from "react";
 import { IToDo } from "../models/inerfaces";
+import { makeStyles } from "@material-ui/core/styles";
+import { Button } from "@material-ui/core";
 
 interface toDoListItemProps {
   todo: IToDo;
@@ -7,16 +9,19 @@ interface toDoListItemProps {
   clickDeleteTodo: () => void;
 }
 
-const delButton = {
-  marginLeft: "10px",
-  color: "#E04132",
-} as React.CSSProperties;
+const useStyles = makeStyles((theme) => ({
+  buttons: {
+    color: theme.palette.primary.main,
+  },
+}));
 
 const TodoListItem: React.FC<toDoListItemProps> = ({
   todo,
   clickCompleteTodo,
   clickDeleteTodo,
 }) => {
+  const classes = useStyles();
+
   return (
     <div>
       <label
@@ -31,9 +36,9 @@ const TodoListItem: React.FC<toDoListItemProps> = ({
         />
         {todo.name}
       </label>
-      <button style={delButton} onClick={clickDeleteTodo}>
+      <Button className={classes.buttons} onClick={clickDeleteTodo}>
         Delete
-      </button>
+      </Button>
     </div>
   );
 };
