@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { IToDo, ToDoState } from "../models/inerfaces";
+import { IToDo } from "../models/inerfaces";
 import { clickComplete, clickDelete } from "../store/actions/actionCreators";
 import AddToDo from "./AddToDo";
 import { Button, makeStyles } from "@material-ui/core";
@@ -11,6 +11,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import { getTodos } from "../store/selectors/selectors";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 const TodoList: React.FC = () => {
   const classes = useStyles();
 
-  const todos = useSelector((state: ToDoState) => state.todos);
+  const todos = useSelector(getTodos);
 
   const dispatch = useDispatch();
 
