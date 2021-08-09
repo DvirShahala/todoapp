@@ -1,5 +1,6 @@
 import { IToDo, ToDoState } from "../../models/inerfaces";
 import * as actionTypes from "../actions/actionTypes";
+import produce from "immer";
 
 const initialState: ToDoState = {
   nextId: 4,
@@ -22,6 +23,10 @@ const todoReducer = (
         ifComplete: false,
       };
       return {
+        // const nextState = produce(state, (draftState: ToDoState) => {
+        //   draftState.todos.push(newTodo);
+        //   draftState.nextId++ as number;
+        // })
         ...state,
         todos: [...state.todos, newTodo],
         nextId: ++state.nextId as number,
