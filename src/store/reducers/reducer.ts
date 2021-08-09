@@ -11,7 +11,7 @@ const initialState: ToDoState = {
   ],
 };
 
-const todoReducer = (
+const todoReducer: any = (
   state: ToDoState = initialState,
   action: { type: string; payload: string | number }
 ) => {
@@ -22,11 +22,8 @@ const todoReducer = (
         name: action.payload as string,
         ifComplete: false,
       };
+
       return {
-        // const nextState = produce(state, (draftState: ToDoState) => {
-        //   draftState.todos.push(newTodo);
-        //   draftState.nextId++ as number;
-        // })
         ...state,
         todos: [...state.todos, newTodo],
         nextId: ++state.nextId as number,
@@ -58,8 +55,9 @@ const todoReducer = (
         ...state,
         todos: newDelListTodos,
       };
+    default:
+      return state;
   }
-  return state;
 };
 
 export default todoReducer;
