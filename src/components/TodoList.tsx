@@ -26,12 +26,18 @@ const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 650,
   },
-  cursor: {
+  pointer: {
     cursor: "pointer",
   },
-  buttons: {
+  complete: {
+    backgroundColor: "#72d37d",
+  },
+  apibuttons: {
     justifyContent: "center",
     marginTop: "5%",
+  },
+  buttons: {
+    border: "1px solid black",
   },
 }));
 
@@ -55,7 +61,7 @@ const TodoList: React.FC = () => {
     try {
       const { data } = await api.get("/todos", {
         params: {
-          _limit: 10,
+          _limit: 20,
         },
       });
 
@@ -104,22 +110,37 @@ const TodoList: React.FC = () => {
           <TableBody>
             {todos.map((toDo: IToDo, index: number) => (
               <TableRow key={toDo.id}>
-                <TableCell component="th" scope="row">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  className={toDo.ifComplete ? classes.complete : ""}
+                >
                   {index + 1}
                 </TableCell>
-                <TableCell component="th" scope="row">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  className={toDo.ifComplete ? classes.complete : ""}
+                >
                   {toDo.name}
                 </TableCell>
                 <TableCell
-                  className={classes.cursor}
+                  className={`${classes.pointer} ${
+                    toDo.ifComplete ? classes.complete : ""
+                  }`}
                   component="th"
                   scope="row"
                   onClick={() => handleCompleteClick(toDo.id)}
                 >
                   {toDo.ifComplete ? "YES" : "NO"}
                 </TableCell>
-                <TableCell component="th" scope="row">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  className={toDo.ifComplete ? classes.complete : ""}
+                >
                   <Button
+                    className={classes.buttons}
                     color="secondary"
                     variant="contained"
                     onClick={() => handleDelClick(toDo.id)}
@@ -135,7 +156,7 @@ const TodoList: React.FC = () => {
 
       <AddToDo />
       <Button
-        className={classes.buttons}
+        className={classes.apibuttons}
         color="secondary"
         variant="outlined"
         onClick={() => handleApiClick()}
