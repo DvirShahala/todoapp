@@ -1,7 +1,11 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IToDo } from "../models/inerfaces";
-import { clickComplete, clickDelete } from "../store/actions/actionCreators";
+import {
+  clickComplete,
+  clickDelete,
+  loadToDo,
+} from "../store/actions/actionCreators";
 import AddToDo from "./AddToDo";
 import { Button, makeStyles } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
@@ -11,7 +15,12 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import { getTodos } from "../store/selectors/selectors";
+import { getNextId, getTodos } from "../store/selectors/selectors";
+import axios from "axios";
+
+const api = axios.create({
+  baseURL: `https://jsonplaceholder.typicode.com/`,
+});
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -20,12 +29,17 @@ const useStyles = makeStyles((theme) => ({
   cursor: {
     cursor: "pointer",
   },
+  buttons: {
+    justifyContent: "center",
+    marginTop: "5%",
+  },
 }));
 
 const TodoList: React.FC = () => {
   const classes = useStyles();
 
   const todos = useSelector(getTodos);
+  let nextId = useSelector(getNextId);
 
   const dispatch = useDispatch();
 
@@ -35,6 +49,32 @@ const TodoList: React.FC = () => {
 
   const handleDelClick = (id: number) => {
     dispatch(clickDelete(id));
+  };
+
+  const loadApiData = () => async (dispatch: Function, getState: Function) => {
+    try {
+      const { data } = await api.get("/todos", {
+        params: {
+          _limit: 10,
+        },
+      });
+
+      const loadTodos: IToDo[] = data.map((todoFromApi: any) => {
+        return {
+          id: nextId++,
+          name: todoFromApi.title,
+          ifComplete: false,
+        };
+      });
+
+      dispatch(loadToDo(loadTodos));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleApiClick = async () => {
+    dispatch(loadApiData());
   };
 
   return (
@@ -94,6 +134,14 @@ const TodoList: React.FC = () => {
       </TableContainer>
 
       <AddToDo />
+      <Button
+        className={classes.buttons}
+        color="secondary"
+        variant="outlined"
+        onClick={() => handleApiClick()}
+      >
+        Load From API
+      </Button>
     </>
   );
 };

@@ -21,3 +21,10 @@ export const clickDelete = (id: number) => {
     payload: id,
   };
 };
+
+export const loadToDo = (todoList: IToDo[]) => {
+  return {
+    type: actionTypes.LOAD_TODO,
+    payload: todoList,
+  };
+};

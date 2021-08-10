@@ -13,7 +13,7 @@ const initialState: ToDoState = {
 
 const todoReducer: any = (
   state: ToDoState = initialState,
-  action: { type: string; payload: string | number }
+  action: { type: string; payload: string | number | IToDo[] }
 ) => {
   switch (action.type) {
     case actionTypes.ADD_TODO:
@@ -55,6 +55,18 @@ const todoReducer: any = (
         ...state,
         todos: newDelListTodos,
       };
+
+    case actionTypes.LOAD_TODO:
+      const tempLoadsTodosList = [...state.todos];
+
+      tempLoadsTodosList.push(...(action.payload as IToDo[]));
+
+      return {
+        ...state,
+        todos: tempLoadsTodosList,
+        nextId: (tempLoadsTodosList.length + 1) as number,
+      };
+
     default:
       return state;
   }
