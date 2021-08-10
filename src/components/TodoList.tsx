@@ -95,17 +95,17 @@ const TodoList: React.FC = () => {
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Id</TableCell>
+              <TableCell>Number</TableCell>
               <TableCell>Description</TableCell>
               <TableCell>Complete</TableCell>
               <TableCell>Delelte Option</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {todos.map((toDo: IToDo) => (
+            {todos.map((toDo: IToDo, index: number) => (
               <TableRow key={toDo.id}>
                 <TableCell component="th" scope="row">
-                  {toDo.id}
+                  {index + 1}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {toDo.name}
