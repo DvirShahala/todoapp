@@ -3,6 +3,7 @@ import * as actionTypes from "../actions/actionTypes";
 import produce from "immer";
 
 const initialState: ToDoState = {
+  isLoading: false,
   nextId: 4,
   todos: [
     { id: 1, name: "Daily Raiden", ifComplete: true },
@@ -65,6 +66,18 @@ const todoReducer: any = (
         ...state,
         todos: tempLoadsTodosList,
         nextId: (tempLoadsTodosList.length + 1) as number,
+      };
+
+    case actionTypes.START_LOADING:
+      return {
+        ...state,
+        isLoading: true,
+      };
+
+    case actionTypes.END_LOADING:
+      return {
+        ...state,
+        isLoading: false,
       };
 
     default:

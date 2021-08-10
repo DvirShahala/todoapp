@@ -4,10 +4,12 @@ import { IToDo } from "../models/inerfaces";
 import {
   clickComplete,
   clickDelete,
+  endLoading,
   loadToDo,
+  startLoading,
 } from "../store/actions/actionCreators";
 import AddToDo from "./AddToDo";
-import { Button, makeStyles } from "@material-ui/core";
+import { Button, LinearProgress, makeStyles } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -15,8 +17,9 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import { getNextId, getTodos } from "../store/selectors/selectors";
+import { getLoading, getNextId, getTodos } from "../store/selectors/selectors";
 import axios from "axios";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const api = axios.create({
   baseURL: `https://jsonplaceholder.typicode.com/`,
@@ -39,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
   buttons: {
     border: "1px solid black",
   },
+  loaded: {
+    marginTop: "10%",
+  },
 }));
 
 const TodoList: React.FC = () => {
@@ -46,6 +52,7 @@ const TodoList: React.FC = () => {
 
   const todos = useSelector(getTodos);
   let nextId = useSelector(getNextId);
+  const isLoading = useSelector(getLoading);
 
   const dispatch = useDispatch();
 
@@ -57,25 +64,34 @@ const TodoList: React.FC = () => {
     dispatch(clickDelete(id));
   };
 
-  const loadApiData = () => async (dispatch: Function, getState: Function) => {
+  const loadApiData = () => (dispatch: Function, getState: Function) => {
+    dispatch(startLoading());
     try {
-      const { data } = await api.get("/todos", {
-        params: {
-          _limit: 20,
-        },
-      });
-
-      const loadTodos: IToDo[] = data.map((todoFromApi: any) => {
-        return {
-          id: nextId++,
-          name: todoFromApi.title,
-          ifComplete: false,
-        };
-      });
-
-      dispatch(loadToDo(loadTodos));
+      // Fake delay for loaded
+      setTimeout(async function () {
+        const { data } = await api.get("/todos", {
+          params: {
+            _limit: 7,
+          },
+        });
+        const loadTodos: IToDo[] = data.map((todoFromApi: any) => {
+          return {
+            id: nextId++,
+            name: todoFromApi.title,
+            ifComplete: false,
+          };
+        });
+        dispatch(loadToDo(loadTodos));
+        dispatch(endLoading());
+      }, 2000);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const linearLoaded = () => {
+    if (isLoading) {
+      return <LinearProgress color="secondary" className={classes.loaded} />;
     }
   };
 
@@ -145,7 +161,7 @@ const TodoList: React.FC = () => {
                     variant="contained"
                     onClick={() => handleDelClick(toDo.id)}
                   >
-                    Delete
+                    <DeleteIcon />
                   </Button>
                 </TableCell>
               </TableRow>
@@ -153,6 +169,8 @@ const TodoList: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {linearLoaded()}
 
       <AddToDo />
       <Button

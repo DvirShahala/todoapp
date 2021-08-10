@@ -28,3 +28,15 @@ export const loadToDo = (todoList: IToDo[]) => {
     payload: todoList,
   };
 };
+
+export const startLoading = () => {
+  return {
+    type: actionTypes.START_LOADING,
+  };
+};
+
+export const endLoading = () => {
+  return {
+    type: actionTypes.END_LOADING,
+  };
+};

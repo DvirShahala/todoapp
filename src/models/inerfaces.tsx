@@ -5,6 +5,7 @@ export interface IToDo {
 }
 
 export interface ToDoState {
+  isLoading: boolean;
   nextId: number;
   todos: IToDo[];
 }
