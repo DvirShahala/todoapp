@@ -13,7 +13,13 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { getLoading, getTodos } from "../store/selectors/selectors";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { loadApiData } from "../store/actions/actionsCreator";
+import {
+  loadApiData,
+  loadApiEverySecData,
+  makeIterval,
+  makeNext,
+} from "../store/actions/actionsCreator";
+import { useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -28,6 +34,10 @@ const useStyles = makeStyles((theme) => ({
   apibuttons: {
     justifyContent: "center",
     marginTop: "5%",
+    textTransform: "none",
+  },
+  buttonEverySec: {
+    marginLeft: "5%",
   },
   buttons: {
     border: "1px solid black",
@@ -55,6 +65,16 @@ const TodoList: React.FC = () => {
 
   const handleApiClick = async () => {
     dispatch(loadApiData());
+  };
+
+  const [isInit, setIsInit] = useState(false);
+
+  const handleApiEverySecClick = () => {
+    if (!isInit) {
+      dispatch(loadApiEverySecData());
+      setIsInit(true);
+    }
+    dispatch(makeIterval());
   };
 
   return (
@@ -118,17 +138,26 @@ const TodoList: React.FC = () => {
       </TableContainer>
 
       {isLoading && (
-        <LinearProgress color="secondary" className={classes.loaded} />
+        <LinearProgress color="primary" className={classes.loaded} />
       )}
 
       <AddToDo />
       <Button
         className={classes.apibuttons}
-        color="secondary"
+        color="primary"
         variant="outlined"
         onClick={() => handleApiClick()}
       >
-        Load From API
+        Load API
+      </Button>
+
+      <Button
+        className={`${classes.apibuttons} ${classes.buttonEverySec}`}
+        color="primary"
+        variant="outlined"
+        onClick={() => handleApiEverySecClick()}
+      >
+        Load Api every 2 sec
       </Button>
     </>
   );
