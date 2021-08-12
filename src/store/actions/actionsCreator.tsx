@@ -76,8 +76,6 @@ export const loadApiEverySecData =
           return getDataFromApi();
         }),
         map(({ data }) => {
-          console.log(data);
-
           return data.map((todoFromApi: any, index: number) => {
             const nextId = getNextId(getState());
             let newId = index + nextId;
