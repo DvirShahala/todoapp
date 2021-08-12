@@ -1,5 +1,5 @@
 import axios from "axios";
-import { map, Subject, switchMap } from "rxjs";
+import { map, Subject, switchMap, takeWhile } from "rxjs";
 import { IToDo } from "../../models/inerfaces";
 import { getNextId, getTodos } from "../selectors/selectors";
 import { endLoading, loadToDo, startLoading } from "./actions";
@@ -103,16 +103,21 @@ export const makeNext = () => {
 export const makeIterval = () => (dispatch: Function, getState: Function) => {
   const subscription = intervalForApi
     .pipe(
-      map(() => {
+      takeWhile(() => {
         const todoLength = getTodos(getState());
-        if (todoLength.length > 10) {
-          subscription.unsubscribe();
-        } else {
-          makeNext();
-        }
+        return todoLength.length < 10;
       })
+      // map(() => {
+      //   const todoLength = getTodos(getState());
+      //   if (todoLength.length > 10) {
+      //     subscription.unsubscribe();
+      //   }
+      //   } else {
+      //     makeNext();
+      //   }
+      // })
     )
-    .subscribe();
+    .subscribe(() => makeNext());
 };
 
 export const getDataFromApi = async () => {
