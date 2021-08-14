@@ -2,10 +2,17 @@ import axios from "axios";
 import { map, Subject, switchMap, takeWhile } from "rxjs";
 import { IToDo } from "../../models/inerfaces";
 import { getNextId, getTodos } from "../selectors/selectors";
-import { endLoading, loadToDo, startLoading } from "./actions";
+import {
+  addToDos,
+  clickComplete,
+  clickDelete,
+  endLoading,
+  loadToDo,
+  startLoading,
+} from "./actions";
 import { interval } from "rxjs";
 const api = axios.create({
-  baseURL: `https://jsonplaceholder.typicode.com/`,
+  baseURL: `http://localhost:8080/api/`,
 });
 
 const subject = new Subject();
@@ -28,7 +35,7 @@ export const loadApiData = () => (dispatch: Function, getState: Function) => {
         let newId = index + nextId;
         return {
           id: newId,
-          name: todoFromApi.title,
+          name: todoFromApi.name,
           ifComplete: false,
         };
       });
@@ -39,32 +46,6 @@ export const loadApiData = () => (dispatch: Function, getState: Function) => {
     console.log(error);
   }
 };
-
-// export const loadApiEverySecData =
-//   () => async (dispatch: Function, getState: Function) => {
-//     const nextId = getNextId(getState());
-
-//     dispatch(startLoading());
-//     try {
-//       const { data } = await api.get("/todos", {
-//         params: {
-//           _limit: 2,
-//         },
-//       });
-//       const loadTodos: IToDo[] = data.map((todoFromApi: any, index: number) => {
-//         let newId = nextId + index;
-//         return {
-//           id: newId,
-//           name: todoFromApi.title,
-//           ifComplete: false,
-//         };
-//       });
-//       dispatch(loadToDo(loadTodos));
-//       dispatch(endLoading());
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
 
 export const loadApiEverySecData =
   () => (dispatch: Function, getState: Function) => {
@@ -81,7 +62,7 @@ export const loadApiEverySecData =
             let newId = index + nextId;
             return {
               id: newId,
-              name: todoFromApi.title,
+              name: todoFromApi.name,
               ifComplete: false,
             };
           });
@@ -125,3 +106,66 @@ export const getDataFromApi = async () => {
     },
   });
 };
+
+export const addTodoToBe =
+  (todoName: string) => async (dispatch: Function, getState: Function) => {
+    const nextId = getNextId(getState());
+    dispatch(startLoading);
+
+    try {
+      await api.post("/todos/addTodo", {
+        id: nextId,
+        name: todoName,
+        ifComplete: false,
+      });
+      dispatch(addToDos(todoName));
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch(endLoading());
+  };
+
+export const deleteTodo =
+  (todoId: number) => async (dispatch: Function, getState: Function) => {
+    dispatch(startLoading);
+
+    try {
+      await api.delete(`/todos/delete/${todoId}`);
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch(clickDelete(todoId));
+    dispatch(endLoading);
+  };
+
+export const toggleTodo =
+  (todoId: number) => async (dispatch: Function, getState: Function) => {
+    dispatch(startLoading);
+
+    try {
+      await api.put(`/todos/toggleComplete/${todoId}`);
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch(clickComplete(todoId));
+    dispatch(endLoading);
+  };
+
+export const initState =
+  () => async (dispatch: Function, getState: Function) => {
+    try {
+      const { data } = await api.get("/todos");
+
+      const loadTodos: IToDo[] = data.map((todoFromApi: any, index: number) => {
+        return {
+          id: todoFromApi.id,
+          name: todoFromApi.name,
+          ifComplete: todoFromApi.ifComplete,
+        };
+      });
+
+      dispatch(loadToDo(loadTodos));
+    } catch (error) {
+      console.log(error);
+    }
+  };

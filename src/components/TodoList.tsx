@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IToDo } from "../models/inerfaces";
-import { clickComplete, clickDelete } from "../store/actions/actions";
 import AddToDo from "./AddToDo";
 import { Button, LinearProgress, makeStyles } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
@@ -14,10 +13,12 @@ import Paper from "@material-ui/core/Paper";
 import { getLoading, getTodos } from "../store/selectors/selectors";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {
+  deleteTodo,
+  initState,
   loadApiData,
   loadApiEverySecData,
   makeIterval,
-  makeNext,
+  toggleTodo,
 } from "../store/actions/actionsCreator";
 import { useState } from "react";
 
@@ -49,25 +50,28 @@ const useStyles = makeStyles((theme) => ({
 
 const TodoList: React.FC = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const [isInit, setIsInit] = useState(false);
 
   const todos = useSelector(getTodos);
   const isLoading = useSelector(getLoading);
 
-  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(initState());
+  }, []);
 
   const handleCompleteClick = (id: number) => {
-    dispatch(clickComplete(id));
+    dispatch(toggleTodo(id));
   };
 
   const handleDelClick = (id: number) => {
-    dispatch(clickDelete(id));
+    dispatch(deleteTodo(id));
   };
 
   const handleApiClick = async () => {
     dispatch(loadApiData());
   };
-
-  const [isInit, setIsInit] = useState(false);
 
   const handleApiEverySecClick = () => {
     if (!isInit) {
@@ -148,7 +152,7 @@ const TodoList: React.FC = () => {
         variant="outlined"
         onClick={() => handleApiClick()}
       >
-        Load API
+        Load More Todos
       </Button>
 
       <Button
@@ -157,7 +161,7 @@ const TodoList: React.FC = () => {
         variant="outlined"
         onClick={() => handleApiEverySecClick()}
       >
-        Load Api every 2 sec
+        Load From Api every 2 sec
       </Button>
     </>
   );

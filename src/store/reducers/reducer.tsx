@@ -1,15 +1,10 @@
 import { IToDo, ToDoState } from "../../models/inerfaces";
 import * as actionTypes from "../actions/actionTypes";
-import produce from "immer";
 
 const initialState: ToDoState = {
   isLoading: false,
-  nextId: 4,
-  todos: [
-    { id: 1, name: "Daily Raiden", ifComplete: true },
-    { id: 2, name: "Learn React", ifComplete: false },
-    { id: 3, name: "Eat lunch", ifComplete: false },
-  ],
+  nextId: 1,
+  todos: [],
 };
 
 const todoReducer: any = (

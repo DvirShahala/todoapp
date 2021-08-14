@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { addToDos } from "../store/actions/actions";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, TextField } from "@material-ui/core";
+import { addTodoToBe } from "../store/actions/actionsCreator";
 
 const useStyles = makeStyles((theme) => ({
   textField: {
@@ -27,17 +28,9 @@ const AddToDo: React.FC = () => {
     setNewTodo(e.target.value);
   };
 
-  // Use Thunk!!!
-  const messageAndDispatch = () => (dispatch: Function, getState: Function) => {
-    if (getState().todos.length >= 5) {
-      alert("you are too busy!!!");
-    }
-    dispatch(addToDos(newTodo));
-  };
-
   const handleSubmit = (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    newTodo.trim() !== "" && dispatch(messageAndDispatch());
+    newTodo.trim() !== "" && dispatch(addTodoToBe(newTodo));
     setNewTodo("");
   };
 
