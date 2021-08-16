@@ -61,12 +61,12 @@ const TodoList: React.FC = () => {
     dispatch(initState());
   }, []);
 
-  const handleCompleteClick = (id: number) => {
-    dispatch(toggleTodo(id));
+  const handleCompleteClick = (todo: IToDo) => {
+    dispatch(toggleTodo(todo));
   };
 
-  const handleDelClick = (id: number) => {
-    dispatch(deleteTodo(id));
+  const handleDelClick = (todo: IToDo) => {
+    dispatch(deleteTodo(todo));
   };
 
   const handleApiClick = async () => {
@@ -117,7 +117,7 @@ const TodoList: React.FC = () => {
                   }`}
                   component="th"
                   scope="row"
-                  onClick={() => handleCompleteClick(toDo.id)}
+                  onClick={() => handleCompleteClick(toDo)}
                 >
                   {toDo.ifComplete ? "YES" : "NO"}
                 </TableCell>
@@ -130,7 +130,7 @@ const TodoList: React.FC = () => {
                     className={classes.buttons}
                     color="secondary"
                     variant="contained"
-                    onClick={() => handleDelClick(toDo.id)}
+                    onClick={() => handleDelClick(toDo)}
                   >
                     <DeleteIcon />
                   </Button>

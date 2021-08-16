@@ -80,21 +80,12 @@ export const makeNext = () => {
 };
 
 export const makeIterval = () => (dispatch: Function, getState: Function) => {
-  const subscription = intervalForApi
+  intervalForApi
     .pipe(
       takeWhile(() => {
         const todoLength = getTodos(getState());
         return todoLength.length < 10;
       })
-      // map(() => {
-      //   const todoLength = getTodos(getState());
-      //   if (todoLength.length > 10) {
-      //     subscription.unsubscribe();
-      //   }
-      //   } else {
-      //     makeNext();
-      //   }
-      // })
     )
     .subscribe(() => makeNext());
 };
@@ -126,28 +117,38 @@ export const addTodoToBe =
   };
 
 export const deleteTodo =
-  (todoId: number) => async (dispatch: Function, getState: Function) => {
+  (todo: IToDo) => async (dispatch: Function, getState: Function) => {
     dispatch(startLoading);
 
     try {
-      await api.delete(`/todos/delete/${todoId}`);
+      await api.delete("/todos/delete", {
+        data: {
+          id: todo.id,
+          name: todo.name,
+          ifComplete: todo.ifComplete,
+        },
+      });
     } catch (error) {
       console.log(error);
     }
-    dispatch(clickDelete(todoId));
+    dispatch(clickDelete(todo));
     dispatch(endLoading);
   };
 
 export const toggleTodo =
-  (todoId: number) => async (dispatch: Function, getState: Function) => {
+  (todo: IToDo) => async (dispatch: Function, getState: Function) => {
     dispatch(startLoading);
 
     try {
-      await api.put(`/todos/toggleComplete/${todoId}`);
+      await api.put("/todos/toggleComplete", {
+        id: todo.id,
+        name: todo.name,
+        ifComplete: todo.ifComplete,
+      });
     } catch (error) {
       console.log(error);
     }
-    dispatch(clickComplete(todoId));
+    dispatch(clickComplete(todo));
     dispatch(endLoading);
   };
 

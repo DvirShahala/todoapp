@@ -9,7 +9,7 @@ const initialState: ToDoState = {
 
 const todoReducer: any = (
   state: ToDoState = initialState,
-  action: { type: string; payload: string | number | IToDo[] }
+  action: { type: string; payload: string | number | IToDo[] | IToDo }
 ) => {
   switch (action.type) {
     case actionTypes.ADD_TODO:
@@ -29,7 +29,7 @@ const todoReducer: any = (
       const newListTodos = [...state.todos];
 
       const indexToChange = newListTodos.findIndex(
-        (todo) => todo.id === (action.payload as number)
+        (todo) => todo.id === ((action.payload as IToDo).id as number)
       );
 
       newListTodos[indexToChange].ifComplete =
@@ -44,7 +44,7 @@ const todoReducer: any = (
       const tempTodosList = [...state.todos];
 
       const newDelListTodos = tempTodosList.filter(
-        (todo) => todo.id !== (action.payload as number)
+        (todo) => todo.id !== ((action.payload as IToDo).id as number)
       );
 
       return {

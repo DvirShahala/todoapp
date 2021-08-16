@@ -8,17 +8,17 @@ export const addToDos = (todo: string) => {
   };
 };
 
-export const clickComplete = (id: number) => {
+export const clickComplete = (todo: IToDo) => {
   return {
     type: actionTypes.CLICK_COMPLETE,
-    payload: id,
+    payload: todo,
   };
 };
 
-export const clickDelete = (id: number) => {
+export const clickDelete = (todo: IToDo) => {
   return {
     type: actionTypes.CLICK_DELETE,
-    payload: id,
+    payload: todo,
   };
 };
 
